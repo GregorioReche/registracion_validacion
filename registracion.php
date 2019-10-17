@@ -18,11 +18,11 @@ if ($_POST) {
   if (empty($errores)) {
     // REGISTRAR
 
-    // $usuario = armarUsuario($_POST);
-    // registrar($usuario);
+     $usuario = armarUsuario($_POST);
+    registrar($usuario);
 
     // REENVIAR AL EXITO
-    header("location:login.php");exit;
+    header("location:listadoUsuarios.php");exit;
   }
 
   foreach ($errores as $error) {

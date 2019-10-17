@@ -38,96 +38,99 @@ function validarRegistracion($datos) {
   else if (filter_var($datos["email"], FILTER_VALIDATE_EMAIL) == false) {
     $errores["email"] = "Debe ingresar un mail válido.";
   }
-  // else if (existeElEmail($datos["email"])) {
-  //   $errores["email"] = "Ese email ya esta tomado";
-  // }
+  else if (existeElEmail($datos["email"])) {
+    $errores["email"] = "Ese email ya esta tomado";
+  }
 
   return $errores;
 }
 
-// function existeElEmail($email) {
-//   $usuario = buscarUsuarioPorEmail($email);
-//
-//   if ($usuario == null) {
-//     return false;
-//   } else {
-//     return true;
-//   }
-// }
+function existeElEmail($email) {
+  $usuario = buscarUsuarioPorEmail($email);
 
-// function buscarUsuarioPorEmail($email) {
-//   $usuarios = traerTodosLosUsuarios();
-//
-//   foreach ($usuarios as $usuario) {
-//     if ($usuario["email"] == $email) {
-//       return $usuario;
-//     }
-//   }
-//
-//   return null;
-// }
+  if ($usuario == null) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
-// function buscarUsuarioPorId($id) {
-//   $usuarios = traerTodosLosUsuarios();
-//
-//   foreach ($usuarios as $usuario) {
-//     if ($usuario["id"] == $id) {
-//       return $usuario;
-//     }
-//   }
-//
-//   return null;
-// }
+function buscarUsuarioPorEmail($email) {
+  $usuarios = traerTodosLosUsuarios();
 
-// function armarUsuario($datos) {
-//   return [
-//     "id" => proximoId(),
-//     "name" => ucfirst($datos["name"]),
-//     "email" => $datos["email"],
-//     "birthday" => $datos["birthday"],
-//     "phone" => $datos["phone"],
-//     "password" => password_hash($datos["password"], PASSWORD_DEFAULT),
-//     "gender" => $datos["gender"]
-//   ];
-// }
+  foreach ($usuarios as $usuario) {
+    if ($usuario["email"] == $email) {
+      return $usuario;
+    }
+  }
 
-// function proximoId() {
-//   $usuarios = traerTodosLosUsuarios();
-//
-//   // Si no hay usuarios el proximo id es el ultimo
-//   if (empty($usuarios)) {
-//     return 1;
-//   }
-//
-//   // obtener ultimo usuario
-//   $ultimoUsuario = end($usuarios);
-//
-//   // Del ultimo usuario obtenemos el id y sumamos uno
-//   return $ultimoUsuario["id"] + 1;
-// }
-//
-// function traerTodosLosUsuarios() {
-//   $archivo = file_get_contents("usuarios.json");
-//
-//   if ($archivo == "") {
-//     return [];
-//   }
-//
-//   $usuarios = json_decode($archivo, true);
-//
-//   return $usuarios;
-// }
-//
-// function registrar($usuario) {
-//   $usuarios = traerTodosLosUsuarios();
-//
-//   $usuarios[] = $usuario;
-//
-//   $usuariosJSON = json_encode($usuarios);
-//
-//   file_put_contents("usuarios.json", $usuariosJSON);
-// }
-//
+  return null;
+}
+
+function buscarUsuarioPorId($id) {
+  $usuarios = traerTodosLosUsuarios();
+
+  foreach ($usuarios as $usuario) {
+    if ($usuario["id"] == $id) {
+      return $usuario;
+    }
+  }
+
+  return null;
+}
+
+function armarUsuario($datos) {
+  return [
+    "id" => proximoId(),
+    "name" => ucfirst($datos["name"]),
+    "email" => $datos["email"],
+    "birthday" => $datos["birthday"],
+    "phone" => $datos["phone"],
+    "password" => password_hash($datos["password"], PASSWORD_DEFAULT),
+    "gender" => $datos["gender"]
+  ];
+}
+
+function proximoId() {
+  $usuarios = traerTodosLosUsuarios();
+
+  // Si no hay usuarios el proximo id es el ultimo
+  if (empty($usuarios)) {
+    return 1;
+  }
+
+  // obtener ultimo usuario
+  $ultimoUsuario = end($usuarios);
+
+  // Del ultimo usuario obtenemos el id y sumamos uno
+  return $ultimoUsuario["id"] + 1;
+}
+
+function traerTodosLosUsuarios() {
+  if(!file_exists("usuarios.json")){
+    return [];
+  }
+  $archivo = file_get_contents("usuarios.json");
+
+  if ($archivo == "") {
+    return [];
+  }
+
+  $usuarios = json_decode($archivo, true);
+
+  return $usuarios;
+}
+
+function registrar($usuario) {
+  $usuarios = traerTodosLosUsuarios();
+
+  $usuarios[] = $usuario;
+
+  $usuariosJSON = json_encode($usuarios);
+
+  file_put_contents("usuarios.json", $usuariosJSON);
+}
+
 function validateAge($birthday, $age = 18)
 {
     // $birthday can be UNIX_TIMESTAMP or just a string-date.
